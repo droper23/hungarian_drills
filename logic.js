@@ -97,23 +97,45 @@ function showHomeScreen() {
         <div class="home-screen">
             <h1>Hungarian Quiz</h1>
             <p>Select a quiz mode:</p>
-            <button id="cases-mode">Cases / Noun Inflections</button>
-            <button id="verbs-mode">Verb Conjugations</button>
+            <select id="difficulty-select">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select>
+            <div style="margin-top: 1rem;">
+                <button id="cases-mode">Cases / Noun Inflections</button>
+                <button id="verbs-mode">Verb Conjugations</button>
+            </div>
         </div>
     `;
 
-    document.getElementById('cases-mode').addEventListener('click', () => startQuiz('case_inflection'));
-    document.getElementById('verbs-mode').addEventListener('click', () => startQuiz('verb_conjugation'));
+    document.getElementById('cases-mode').addEventListener('click', () => {
+        const diff = document.getElementById('difficulty-select').value;
+        startQuiz('case_inflection', diff);
+    });
+    document.getElementById('verbs-mode').addEventListener('click', () => {
+        const diff = document.getElementById('difficulty-select').value;
+        startQuiz('verb_conjugation', diff);
+    });
 }
 
-async function startQuiz(mode) {
+async function startQuiz(mode, difficulty) {
     // Load word data first if not already
     if (Object.keys(wordData).length === 0) {
         await loadWordDataCSV();
     }
 
     // Load the CSV for the selected mode
-    await loadQuestionsFromCSV(mode);
+    if (mode === 'verb_conjugation') {
+        appState.questions = await loadVerbQuestionsFromCSV(
+            appState.settings?.difficulty || 'beginner'
+        );
+    } else {
+        await loadQuestionsFromCSV(mode);
+    }
+
+    // 🔹 Randomize and pick only 10 questions
+    appState.questions = shuffleArray(appState.questions).slice(0, 10);
 
     // reset state
     appState.currentIndex = 0;
@@ -122,14 +144,11 @@ async function startQuiz(mode) {
     appState.isSubmitted = false;
     appState.currentType = mode; // store selected mode
 
-    // Rebuild quiz HTML
+    // Rebuild quiz HTML (your existing code) …
     const app = document.getElementById('app');
     app.innerHTML = `
         <header class="quiz-header">
-            <div class="progress-wrapper">
-                <div id="progress-bar" class="progress-bar"></div>
-            </div>
-            <div id="score-display" class="score-display"></div>
+            <div id="progress-text" style="font-size:0.9rem; color:#cbd5f5;"></div>
             <div id="mode-badges" class="mode-badges"></div>
         </header>
 
@@ -149,15 +168,22 @@ async function startQuiz(mode) {
         </footer>
     `;
 
-    // Load the CSV for the selected mode
-    loadQuestionsFromCSV(mode).then(() => {
-        renderProgress();
-        renderModeBadges();
-        renderQuestion();
-        renderAnswerOverlay();
-        setupAnswerInput();
-        setupButtons();
-        setupTooltips();
-        setupAdminOverlay();
-    });
+    renderProgress();       // 🔹 Update progress bar & text
+    renderModeBadges();
+    renderQuestion();
+    renderAnswerOverlay();
+    setupAnswerInput();
+    setupButtons();
+    setupTooltips();
+    setupAdminOverlay();
+}
+
+// 🔹 Utility function: shuffle array
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
 }

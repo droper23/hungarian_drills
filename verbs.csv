@@ -1,3 +1,7 @@
-id,type,difficulty,sentence,translation,correctAnswer,explanation,verb
-1,verb_conjugation,beginner,____ a házba.,I *went* into the house,mentem,First person singular past tense of menni,menni
-2,verb_conjugation,beginner,____ a könyvet.,I *read* the book,olvastam,First person singular past tense of olvas,olvas
+Verb,Tense,Form,Translation,Difficulty
+elfogad,Present indefinite tense,elfogadok,I accept,beginner
+elfogad,Present indefinite tense,elfogadsz,You accept,beginner
+elfogad,Present indefinite tense,elfogad,He accepts,beginner
+elfogad,Present definite tense,elfogadom,I accept,beginner
+elfogad,Present definite tense,elfogadod,You accept,beginner
+elfogad,Present definite tense,elfogadja,He accepts,beginner

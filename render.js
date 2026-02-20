@@ -1,18 +1,16 @@
 // render.js
 
 function renderProgress() {
-    const progressBar = document.getElementById('progress-bar');
-    const scoreDisplay = document.getElementById('score-display');
+    const progressText = document.getElementById('progress-text');
+    if (!progressText) return;
 
     const i = appState.currentIndex;
     const total = appState.questions.length;
     const correct = appState.correctCount;
 
-    const pct = total ? Math.round((i / total) * 100) : 0;
-    progressBar.style.width = pct + '%';
-
     const scorePct = i ? Math.round((correct / i) * 100) : 0;
-    scoreDisplay.textContent = `Score: ${scorePct}%`;
+
+    progressText.innerHTML = `Question ${i + 1} / ${total} <span id="score-text">Score: ${scorePct}%</span>`;
 }
 
 function renderModeBadges() {
@@ -47,6 +45,13 @@ function renderModeBadges() {
             'chip case-chip case-' + q.caseInflection.inflectionCase;
         caseChip.textContent = q.caseInflection.inflectionCase;
         container.appendChild(caseChip);
+    }
+
+    if (q.formType && appState.isSubmitted) {
+        const formChip = document.createElement('span');
+        formChip.className = 'chip diff-chip';
+        formChip.textContent = q.formType.charAt(0).toUpperCase() + q.formType.slice(1);
+        container.appendChild(formChip);
     }
 }
 
