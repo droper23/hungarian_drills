@@ -1,0 +1,5 @@
+id,type,difficulty,sentence,translation,correctAnswer,explanation,caseWord,caseName,blankStart,blankEnd
+1,case_inflection,beginner,Látom ___ házat.,I see the house.,a,Definite accusative: a/az → -t,ház,accusative,8,8
+2,case_inflection,beginner,A könyv ___ táskában van.,The book is in the bag.,a,Inessive: -ban/-ben,táska,"""inessive"" ",9,9
+3,case_inflection,beginner,Adok neked ___ almát.,I give you an apple.,egy,Dative: -nak/-nek,alma,dative,12,12
+4,case_inflection,beginner,Ez ___ könyvem.,This is my book.,a,Possessive definite,könyv,possessive,3,3

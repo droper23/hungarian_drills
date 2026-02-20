@@ -2,8 +2,6 @@
 const DEFAULT_SETTINGS = {
     showTranslationAutomatically: true,
     showExplanationAutomatically: true,
-    enableSounds: true,
-    autoPlayAudio: true,
     hasSeenWordDefinitions: false,
 };
 

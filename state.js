@@ -1,57 +1,89 @@
 // state.js
 
-// Example questions; replace with your own or fetch from backend.
-const SAMPLE_QUESTIONS = [
-    {
-        id: 1,
-        type: 'case_inflection',
-        difficulty: 'intermediate',
-        sentence: 'Minä näen ____ puun.',
-        translation: 'I see the tree.',
-        correctAnswer: 'sen',
-        altAnswers: [],
-        audioUrl: 'audio/q1.mp3',   // optional
-        explanation: 'Accusative case of "se" used as a direct object.',
-        words: [
-            { text: 'Minä', definition: null },
-            { text: 'näen', definition: null },
-            { text: '____', isBlank: true },
-            {
-                text: 'puun.',
-                definition: {
-                    baseForm: 'puu',
-                    partOfSpeech: 'noun',
-                    englishDefinitions: ['tree'],
-                    grammaticalInfo: { case: 'gen/acc', number: 'singular' },
-                    grammarTip: 'Genitive/accusative ends in -n.',
-                },
-            },
-        ],
-        caseInflection: {
-            word: 'se',
-            inflectionCase: 'accusative',
-        },
-    },
-    {
-        id: 2,
-        type: 'listening',
-        difficulty: 'beginner',
-        sentence: 'Kuuntele ja kirjoita lause.',
-        translation: 'Listen and type the sentence.',
-        correctAnswer: 'Hyvää huomenta',
-        altAnswers: [],
-        audioUrl: 'audio/q2.mp3',
-        explanation: 'Standard Finnish greeting for "Good morning".',
-        words: [],
-    },
-];
-
 const appState = {
-    questions: SAMPLE_QUESTIONS,
+    questions: [],
     currentIndex: 0,
     correctCount: 0,
     currentAnswer: '',
+    isSubmitted: false,   // 🔥 ADD THIS
     settings: loadSettings(),
     sessionId: null,
-    isSubmitted: false,
 };
+
+async function loadQuestionsFromCSV(mode = 'all') {
+    const filename = mode === 'verb_conjugation' ? 'verbs.csv' : 'cases.csv';
+    try {
+        const response = await fetch(filename);
+        const csvText = await response.text();
+        const parsed = Papa.parse(csvText, { header: true });
+
+        appState.questions = parsed.data
+            .filter(row => row.sentence && row.correctAnswer)
+            .map((row, index) => {
+                const q = {
+                    id: parseInt(row.id) || index + 1,
+                    type: row.type || 'case_inflection',
+                    difficulty: row.difficulty || 'beginner',
+                    sentence: row.sentence,
+                    translation: row.translation || '',
+                    correctAnswer: row.correctAnswer,
+                    explanation: row.explanation || '',
+                    words: [] // filled later
+                };
+
+                if (q.type === 'case_inflection') {
+                    q.caseInflection = {
+                        word: row.caseWord,
+                        inflectionCase: row.caseName
+                    };
+                    // generate words array for rendering
+                    q.words = createWordsArray(row.sentence, row.caseWord);
+                } else if (q.type === 'verb_conjugation') {
+                    q.verb = row.verb;
+                    q.words = createWordsArray(row.sentence, row.verb, true); // verb blank
+                }
+
+                return q;
+            });
+        console.log(`Loaded ${appState.questions.length} questions from CSV: ${filename}`);
+    } catch (error) {
+        console.error('Failed to load CSV:', error);
+        appState.questions = []; // fallback empty
+    }
+}
+
+function createWordsArray(sentence) {
+    const parts = sentence.split(' ');
+
+    return parts.map(word => {
+        const cleanWord = word.replace(/[^a-zA-ZáéíóöőúüűÁÉÍÓÖŐÚÜŰ]/g, ''); // strip punctuation
+        const hoverInfo = wordData[cleanWord];
+
+        if (word.includes('___')) {
+            return { text: '', isBlank: true };
+        } else if (hoverInfo) {
+            return {
+                text: word,
+                definition: {
+                    baseForm: hoverInfo.baseForm,
+                    partOfSpeech: hoverInfo.partOfSpeech,
+                    englishDefinitions: [hoverInfo.translation]
+                }
+            };
+        } else {
+            return { text: word };
+        }
+    });
+}
+
+const wordData = {};
+function loadWordDataCSV() {
+    return fetch('word_data.csv')
+        .then(res => res.text())
+        .then(csv => {
+            const parsed = Papa.parse(csv, { header: true });
+            parsed.data.forEach(row => {
+                wordData[row.word] = row;
+            });
+        });
+}

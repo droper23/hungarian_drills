@@ -21,6 +21,7 @@ function renderModeBadges() {
     if (!q) return;
     container.innerHTML = '';
 
+    // Mode badge
     const modeChip = document.createElement('span');
     modeChip.className = 'chip mode-chip';
     modeChip.textContent =
@@ -31,6 +32,7 @@ function renderModeBadges() {
                 : 'Cases';
     container.appendChild(modeChip);
 
+    // Difficulty badge
     if (q.difficulty) {
         const diffChip = document.createElement('span');
         diffChip.className = 'chip diff-chip';
@@ -38,7 +40,8 @@ function renderModeBadges() {
         container.appendChild(diffChip);
     }
 
-    if (q.caseInflection?.inflectionCase) {
+    // Case badge: only show after submission
+    if (q.caseInflection?.inflectionCase && appState.isSubmitted) {
         const caseChip = document.createElement('span');
         caseChip.className =
             'chip case-chip case-' + q.caseInflection.inflectionCase;
@@ -53,20 +56,20 @@ function renderSentenceWithBlank(q) {
     return q.words.map((w) => {
         if (w.isBlank) {
             if (appState.isSubmitted) {
-                // Return the correct answer in bold when submitted
+                // show correct answer in bold after submission
                 return `<strong class="correct-answer-display">${q.correctAnswer}</strong>`;
             } else {
-                // Show placeholders while typing
                 return `<span class="blank">_____</span>`;
             }
         }
 
-        // Tooltip logic for normal words
-        const defAttr = w.definition
-            ? `class="word-tooltip" data-definition="${encodeURIComponent(JSON.stringify(w.definition))}"`
-            : '';
-
-        return `<span ${defAttr}>${w.text}</span>`;
+        // Tooltip logic
+        if (w.definition) {
+            const defAttr = `class="word-tooltip" data-definition='${encodeURIComponent(JSON.stringify(w.definition))}'`;
+            return `<span ${defAttr}>${w.text}</span>`;
+        } else {
+            return `<span>${w.text}</span>`;
+        }
     }).join(' ');
 }
 
@@ -76,20 +79,34 @@ function renderQuestion() {
     if (!q) return;
 
     container.classList.remove('enter');
-    // force reflow
     void container.offsetWidth;
     container.classList.add('enter');
 
+    // Determine the target word
+    let targetWordHTML = '';
+    if (q.type === 'case_inflection' && q.caseInflection?.word) {
+        targetWordHTML = `<div class="target-word">Inflect the word <em><strong>${q.caseInflection.word}</strong></em> correctly:</div>`;
+    } else if (q.type === 'verb_conjugation' && q.verb) {
+        targetWordHTML = `<div class="target-word">Conjugate the verb <em><strong>${q.verb}</strong></em> correctly:</div>`;
+    }
+
+    // Replace asterisks in translation with <strong>
+    let translationHTML = '';
+    if (q.translation) {
+        translationHTML = q.translation.replace(/\*(.*?)\*/g, '<strong><u>$1</u></strong>');
+    }
+
     container.innerHTML = `
-    <div class="sentence">
-      ${renderSentenceWithBlank(q)}
+    ${targetWordHTML}
+    <div class="sentence" style="margin-bottom: .25rem; margin-top: 1.25rem;">
+        ${renderSentenceWithBlank(q)}
     </div>
     <div class="translation ${
         appState.settings.showTranslationAutomatically ? '' : 'hidden'
-    }">
-      ${q.translation || ''}
+    }" style="margin-top: 0.5rem;">
+        ${translationHTML}
     </div>
-  `;
+`;
 
     renderExplanation(false);
 }

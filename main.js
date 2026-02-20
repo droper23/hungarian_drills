@@ -28,30 +28,24 @@ function setupButtons() {
         .getElementById('next-button')
         .addEventListener('click', goToNextQuestion);
 
-    document
-        .getElementById('toggle-explanation-button')
-        .addEventListener('click', () => {
-            const el = document.getElementById('explanation-container');
-            if (!el.textContent) {
-                renderExplanation(true);
-                return;
-            }
-            el.classList.toggle('open');
-        });
+    // document
+    //     .getElementById('toggle-explanation-button')
+    //     .addEventListener('click', () => {
+    //         const el = document.getElementById('explanation-container');
+    //         if (!el.textContent) {
+    //             renderExplanation(true);
+    //             return;
+    //         }
+    //         el.classList.toggle('open');
+    //     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // initial render
-    renderProgress();
-    renderModeBadges();
-    renderQuestion();
-    renderAnswerOverlay();
-    setupAnswerInput();
-    setupButtons();
-    setupTooltips();
-    setupAdminOverlay();
+document.addEventListener('DOMContentLoaded', async function() {
+    await loadWordDataCSV();        // Load all hoverable word info
+    await loadQuestionsFromCSV();   // Load quiz questions
 
-    // persist settings when window closes if you add controls later
+    showHomeScreen();               // Home screen now comes first
+
     window.addEventListener('beforeunload', () => {
         saveSettings(appState.settings);
     });

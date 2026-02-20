@@ -10,20 +10,18 @@ function setupTooltips() {
 
     document.addEventListener('mouseover', (e) => {
         const span = e.target.closest('.word-tooltip');
-        if (!span) {
-            hideTooltip();
-            return;
-        }
+        if (!span) return hideTooltip();
         const defJson = span.getAttribute('data-definition');
         if (!defJson) return;
-        const def = JSON.parse(decodeURIComponent(defJson));
+        const def = JSON.parse(defJson);
         showTooltip(span, def);
     });
 
     document.addEventListener('mouseout', (e) => {
-        if (!e.relatedTarget || !e.relatedTarget.closest('.word-tooltip')) {
-            hideTooltip();
-        }
+        const from = e.target.closest('.word-tooltip');
+        const to = e.relatedTarget?.closest('.word-tooltip');
+        if (!from || from === to) return;
+        hideTooltip();
     });
 }
 
