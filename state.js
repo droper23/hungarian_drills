@@ -126,15 +126,11 @@ function pickVerbForm(verbRow, difficulty) {
 }
 
 const verbSentenceTemplates = {
-    menni: {
+    men: {
         indefinite: {
             hu: "___ a házba",
             en: "*{{verb}}* into the house"
         },
-        definite: {
-            hu: "___ a házat",
-            en: "*{{verb}}* the house (definite)"
-        }
     },
     elfogad: {
         indefinite: {
@@ -144,6 +140,26 @@ const verbSentenceTemplates = {
         definite: {
             hu: "___ az ajánlatot",
             en: "*{{verb}}* the offer"
+        }
+    },
+    főz: {
+        indefinite: {
+            hu: "___ egy finom levest",
+            en: "*{{verb}}* a delicious soup"
+        },
+        definite: {
+            hu: "___ a paprikás csirkét",
+            en: "*{{verb}}* the chicken paprikas"
+        }
+    },
+    en: {
+        indefinite: {
+            hu: "___ gulyáslevest",
+            en: "*{{verb}}* goulash"
+        },
+        definite: {
+            hu: "___ a töltött paprikást",
+            en: "*{{verb}}* the stuffed peppers"
         }
     }
 };

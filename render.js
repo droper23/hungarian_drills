@@ -92,7 +92,7 @@ function renderQuestion() {
     if (q.type === 'case_inflection' && q.caseInflection?.word) {
         targetWordHTML = `<div class="target-word">Inflect the word <em><strong>${q.caseInflection.word}</strong></em> correctly:</div>`;
     } else if (q.type === 'verb_conjugation' && q.verb) {
-        targetWordHTML = `<div class="target-word">Conjugate the verb <em><strong>${q.verb}</strong></em> correctly:</div>`;
+        targetWordHTML = `<div class="target-word">Conjugate the verb <em><strong>${q.verb}ni</strong></em> correctly:</div>`;
     }
 
     // Replace asterisks in translation with <strong>
