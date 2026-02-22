@@ -547,45 +547,62 @@ const verbSentenceTemplates = {
 };
 
 async function loadVerbQuestionsFromCSV(difficulty) {
-    const response = await fetch('verbs.csv');
-    const csvText = await response.text();
-    const parsed = Papa.parse(csvText, { header: true });
+    try {
+        const response = await fetch('verbs.csv');
+        const csvText = await response.text();
+        const parsed = Papa.parse(csvText, { header: true });
 
-    const rows = parsed.data.filter(r =>
-        r.Verb && r.Form && r.Translation &&
-        (!difficulty || r.Difficulty === difficulty)
-    );
+        const rows = parsed.data.filter(r =>
+            r.Verb && r.Form && r.Translation &&
+            (!difficulty || r.Difficulty === difficulty)
+        );
 
-    const questions = [];
+        const questions = [];
 
-    rows.forEach(row => {
-        const verbKey = (row.Verb || "").trim().toLowerCase();
-        const templateSet = verbSentenceTemplates[verbKey];
+        rows.forEach(row => {
+            const verbKey = (row.Verb || "").trim().toLowerCase();
+            const templateSet = verbSentenceTemplates[verbKey];
 
-        if (!templateSet) {
-            console.warn("No template for verb:", verbKey);
-            return; // skip this row
-        }
+            if (!templateSet) {
+                console.warn("No template for verb:", verbKey);
+                return; // skip this row
+            }
 
-        let formType = (row.Tense || "").toLowerCase().includes('definite') ? 'definite' : 'indefinite';
-        const template = templateSet[formType] || templateSet['indefinite'];
-        if (!template) {
-            console.warn("No template for verb & formType:", verbKey, formType);
-            return;
-        }
+            // Determine form type
+            const tense = (row.Tense || "").trim().toLowerCase();
+            let formType = 'indefinite';
 
-        questions.push({
-            type: "verb_conjugation",
-            verb: verbKey,
-            formType,
-            sentence: template.hu,
-            translation: template.en.replace("{{verb}}", row.Translation),
-            correctAnswer: row.Form,
-            difficulty: row.Difficulty,
-            words: createWordsArray(template.hu, row.Form, true)
+            if (tense.includes('indefinite')) {
+                formType = 'indefinite';
+            } else if (tense.includes('definite')) {
+                formType = 'definite';
+            }
+
+            // Pick template safely
+            let template = templateSet[formType];
+            if (!template) {
+                console.warn(`Verb ${verbKey} does not have ${formType} form, using indefinite instead`);
+                template = templateSet['indefinite'];
+            }
+
+            // Push the question
+            questions.push({
+                type: "verb_conjugation",
+                verb: verbKey,
+                formType,
+                sentence: template.hu,
+                translation: template.en.replace("{{verb}}", row.Translation),
+                correctAnswer: row.Form,
+                difficulty: row.Difficulty,
+                words: createWordsArray(template.hu, row.Form, true)
+            });
         });
-    });
 
-    console.log(`Loaded ${questions.length} verb questions`);
-    return questions;
+        console.log(`Loaded ${questions.length} verb questions`);
+        return questions;
+
+    } catch (error) {
+        console.error("Error loading verb questions:", error);
+        return [];
+    }
 }

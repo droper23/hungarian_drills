@@ -20,4 +20,3 @@ function loadSettings() {
 function saveSettings(settings) {
     localStorage.setItem('quiz-settings', JSON.stringify(settings));
 }
-
