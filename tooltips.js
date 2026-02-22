@@ -48,3 +48,4 @@ function hideTooltip() {
     if (!tooltipEl) return;
     tooltipEl.classList.add('hidden');
 }
+

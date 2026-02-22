@@ -50,3 +50,4 @@ document.addEventListener('DOMContentLoaded', async function() {
         saveSettings(appState.settings);
     });
 });
+

@@ -165,3 +165,4 @@ function renderExplanation(open) {
         container.classList.remove('open');
     }
 }
+
