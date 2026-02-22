@@ -127,9 +127,7 @@ async function startQuiz(mode, difficulty) {
 
     // Load the CSV for the selected mode
     if (mode === 'verb_conjugation') {
-        appState.questions = await loadVerbQuestionsFromCSV(
-            appState.settings?.difficulty || 'beginner'
-        );
+        appState.questions = await loadVerbQuestionsFromCSV(difficulty);
     } else {
         await loadQuestionsFromCSV(mode);
     }
