@@ -33,4 +33,3 @@ function diffAnswer(input, correct) {
     }
     return result;
 }
-
