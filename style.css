@@ -337,3 +337,37 @@ body {
 #score-text {
     margin-left: 1rem; /* adjust to taste */
 }
+
+.quiz-button {
+    background: radial-gradient(circle at top, #1e293b, #020617);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+    margin: 0.25rem; /* optional spacing between buttons */
+}
+
+.quiz-button:hover {
+    background-color: #4338ca;
+}
+
+.quiz-select {
+    background: radial-gradient(circle at top, #1e293b, #020617);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+/* Optional: change arrow color */
+.quiz-select option {
+    color: black; /* text inside options */
+}

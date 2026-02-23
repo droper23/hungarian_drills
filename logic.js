@@ -97,14 +97,14 @@ function showHomeScreen() {
         <div class="home-screen">
             <h1>Hungarian Quiz</h1>
             <p>Select a quiz mode:</p>
-            <select id="difficulty-select">
+            <select id="difficulty-select" class="quiz-select">
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
                 <option value="advanced">Advanced</option>
             </select>
             <div style="margin-top: 1rem;">
-                <button id="cases-mode">Cases / Noun Inflections</button>
-                <button id="verbs-mode">Verb Conjugations</button>
+                <button class="quiz-button" id="cases-mode">Cases / Noun Inflections</button>
+                <button class="quiz-button" id="verbs-mode">Verb Conjugations</button>
             </div>
         </div>
     `;
