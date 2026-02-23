@@ -209,7 +209,7 @@ def get_translation(form, root_verb, tense_name):
     return f"{pronoun} {root_en}"
 
 # Write CSV
-with open("top_100_hungarian_verbs_with_translation.csv", "w", newline="", encoding="utf-8") as f:
+with open("verbs.csv", "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
     writer.writerow(["Verb", "Tense", "Form", "Translation", "Difficulty"])
 
@@ -241,102 +241,4 @@ with open("top_100_hungarian_verbs_with_translation.csv", "w", newline="", encod
 
         time.sleep(0.5)
 
-print("Saved to top_100_hungarian_verbs_with_translation.csv")
-
-
-
-#
-# import requests
-# from bs4 import BeautifulSoup
-# import csv
-# import time
-#
-# # Top 100 most common Hungarian verbs (infinitive forms)
-# top_verbs = [
-#     "elfogad", "hozzáad", "megenged", "válaszol", "megérkez",
-#     "kérdez", "lesz", "vál", "hisz", "tör", "hoz", "vesz",
-#     "hív", "változtat", "választ", "tisztít", "bezár",
-#     "jön", "visszajön", "folytat", "főz", "számol", "sír",
-#     "vág", "dönt", "csinál", "vezet", "eszik", "belép",
-#     "repül", "néz", "lát", "mond", "vesz", "készít",
-#     "tud", "gondol", "kap", "fizet", "szeret", "vár",
-#     "segít", "kér", "ad", "gyakorol", "iszik"
-# ]
-#
-# verbs_no_ni = [verb[:-2] if verb.endswith("ni") else verb for verb in top_verbs]
-#
-# base_url = "https://cooljugator.com/hu/"
-#
-# # Simple function to assign difficulty based on tense
-# def get_difficulty(tense_name):
-#     tense_name_lower = tense_name.lower()
-#     if "present" in tense_name_lower:
-#         return "beginner"
-#     elif "past" in tense_name_lower or "conditional" in tense_name_lower:
-#         return "intermediate"
-#     else:
-#         return "advanced"
-#
-# # Simple placeholder for translation (you could replace with Glosbe API)
-# def get_translation(hun_form):
-#     # For now, just make a basic "I/You/He ..." placeholder
-#     # For more advanced, use Glosbe or another translation API
-#     pronouns = {
-#         "ok": "I",
-#         "sz": "You (singular)",
-#         "unk": "We",
-#         "tok": "You (plural)",
-#         "nak": "They",
-#         "om": "I",
-#         "od": "You",
-#         "ja": "He/She",
-#         "juk": "We",
-#         "játok": "You (plural)",
-#         "ják": "They",
-#         "tam": "I",
-#         "tál": "You",
-#         "ott": "He/She",
-#         "tunk": "We",
-#         "tátok": "You (plural)",
-#         "tak": "They"
-#     }
-#     for key, pron in pronouns.items():
-#         if hun_form.endswith(key):
-#             return f"{pron} {hun_form}"
-#     return hun_form  # fallback
-#
-# # Write CSV with Translation and Difficulty
-# with open("top_100_hungarian_verbs_with_difficulty.csv", "w", newline="", encoding="utf-8") as f:
-#     writer = csv.writer(f)
-#     writer.writerow(["Verb", "Tense", "Form", "Translation", "Difficulty"])
-#
-#     for verb in verbs_no_ni:
-#         print(f"Scraping {verb}...")
-#         url = base_url + verb
-#         res = requests.get(url)
-#         soup = BeautifulSoup(res.text, "html.parser")
-#
-#     # Find all tense sections by class
-#         tense_divs = soup.find_all("div", class_="tense-title")
-#         for tense_div in tense_divs:
-#             tense_name = tense_div.get_text(strip=True)
-#
-#             # Only look at siblings after this tense-title
-#             forms = []
-#             sibling = tense_div.find_next_sibling()
-#             while sibling and len(forms) < 6:
-#                 meta = sibling.find("div", class_="meta-form")
-#                 if meta:
-#                     forms.append(meta.get_text(strip=True))
-#                 sibling = sibling.find_next_sibling()
-#
-#             difficulty = get_difficulty(tense_name)
-#
-#             for form in forms:
-#                 if tense_name:
-#                     translation = get_translation(form)
-#                     writer.writerow([verb, tense_name, form, translation, difficulty])
-#
-#         time.sleep(0.5)
-#
-# print("Saved to top_100_hungarian_verbs_with_difficulty.csv")
+print("Saved to verbs.csv")

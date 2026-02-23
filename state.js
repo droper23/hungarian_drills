@@ -542,7 +542,18 @@ const verbSentenceTemplates = {
             hu: "___ a vizet",
             en: "*{{verb}}* the water"
         }
-    }
+    },
+
+    vin: {
+        indefinite: {
+            hu: "___ néhány könyvet a könyvtárba.",
+                en: "*{{verb}}* some books to the library"
+        },
+        definite: {
+            hu: "___ a testvéremet a korházba",
+                en: "*{{verb}}* my brother to the hospital"
+        }
+}
 
 };
 
@@ -578,14 +589,20 @@ async function loadVerbQuestionsFromCSV(difficulty) {
                 formType = 'definite';
             }
 
-            // Pick template safely
             let template = templateSet[formType];
             if (!template) {
                 console.warn(`Verb ${verbKey} does not have ${formType} form, using indefinite instead`);
                 template = templateSet['indefinite'];
             }
 
-            // Push the question
+            // 🔎 DEBUG OUTPUT
+            console.log("----");
+            console.log("Verb:", verbKey);
+            console.log("CSV Tense:", tense);
+            console.log("Detected formType:", formType);
+            console.log("CSV Correct Form:", row.Form);
+            console.log("Template Used:", template.hu);
+
             questions.push({
                 type: "verb_conjugation",
                 verb: verbKey,
