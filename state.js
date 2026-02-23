@@ -165,7 +165,7 @@ const verbSentenceTemplates = {
         },
     },
 
-    választ: {
+    választa: {
         indefinite: {
             hu: "___ egy lehetőséget",
             en: "*{{verb}}* an option"
