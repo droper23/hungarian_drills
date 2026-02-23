@@ -15,9 +15,6 @@ Built using:
 
 ---
 
-
----
-
 ## Features
 
 ### Case Inflection Mode
