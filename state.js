@@ -595,17 +595,10 @@ async function loadVerbQuestionsFromCSV(difficulty) {
                 template = templateSet['indefinite'];
             }
 
-            // 🔎 DEBUG OUTPUT
-            console.log("----");
-            console.log("Verb:", verbKey);
-            console.log("CSV Tense:", tense);
-            console.log("Detected formType:", formType);
-            console.log("CSV Correct Form:", row.Form);
-            console.log("Template Used:", template.hu);
-
             questions.push({
                 type: "verb_conjugation",
                 verb: verbKey,
+                tense,
                 formType,
                 sentence: template.hu,
                 translation: template.en.replace("{{verb}}", row.Translation),

@@ -83,6 +83,13 @@ function renderQuestion() {
     const q = appState.questions[appState.currentIndex];
     if (!q) return;
 
+    // DEBUG: log only the currently tested form
+    if (q.type === 'verb_conjugation') {
+        console.log(
+            `[TESTING] ${q.verb} | ${q.tense} | ${q.formType} → ${q.correctAnswer}`
+        );
+    }
+
     container.classList.remove('enter');
     void container.offsetWidth;
     container.classList.add('enter');
