@@ -182,8 +182,8 @@ const verbSentenceTemplates = {
             en: "*{{verb}}* a story"
         },
         definite: {
-            hu: "___ az igazságot",
-            en: "*{{verb}}* the truth"
+            hu: "___, hogy ez az igazság",
+            en: "*{{verb}}* this is the truth"
         }
     },
 
@@ -334,6 +334,10 @@ const verbSentenceTemplates = {
             hu: "___ egy kérdésben",
             en: "*{{verb}}* in a matter"
         },
+        definite: {
+            hu: "___, hogy odamegyünk",
+            en: "*{{verb}}* that we're going there"
+        },
     },
 
     csinál: {
@@ -444,8 +448,8 @@ const verbSentenceTemplates = {
             en: "*{{verb}}* of an idea"
         },
         definite: {
-            hu: "___ finom az étel",
-            en: "*{{verb}}* the food is delicious"
+            hu: "___, hogy finom az étel",
+            en: "*{{verb}}* that the food is delicious"
         }
     },
 
